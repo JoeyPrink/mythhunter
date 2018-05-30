@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <style>
+
+        #quest-title {
+            font-size: 1.5em;
+            text-align: center;
+            color: #993300;
+        }
+
+        #task-title {
+            font-size: 1.3em;
+            text-align: center;
+            color: #993300;
+        }
+
+        #container {
+            background-color: #c68c53;
+            border-radius: 15px;
+            padding: 15px;
+        }
+
+        .quiz-group-container > p {
+            font-weight: bold;
+        }
+
+        .quiz-group-container .quiz-group-option {
+            text-indent: 10px;
+        }
+
+        .quiz-group-container .quiz-group-option > label {
+            font-weight: normal;
+        }
+
+        .task-image {
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+<form action="">
+    <div id="container" style='height:100%;width:100%;'>
+        <div id="quest-content" style='height:100%;width:100%;overflow:hidden;'>
+            <div id="quest-title">{{task.questTitle}}</div>
+            <div id="task-title">{{task.title}}</div>
+
+            <div id="quest-content-text">{{task.content}}</div><div id="quest-footer">
+                <p id="start-info" style="display:none"></p>
+                <button class="footer-btn" id="start-btn" value='Start'/>
+                <button class="footer-btn" id="cancel-btn" value='Cancel'/>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>

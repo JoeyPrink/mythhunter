@@ -1,0 +1,125 @@
+<div ng-class="{'not-clickable': map.interactionDisabled}" ng-intro-options="map.introOptions" keypress-events
+     ng-intro-method="map.startIntro">
+    <div id="mapView" layout="column"  ng-mousedown="map.mouseDown($event)"></div>
+
+    <md-toolbar id="quest-toolbar" ng-if="map.quest"
+                cg-busy="{promise:map.saveQuestPromise, message:{{'TEXT_SAVING_QUEST' | translate}}, minDuration:1000}"
+                flex>
+        <div class="md-toolbar-tools" ng-click="map.showPlaceMarkerInfo()" flex>
+
+            <!--<md-button ng-disabled="map.drawing()" ng-click="map.addQuestReward()" class="md-icon-button" aria-label="Complex">-->
+            <!--<md-icon md-svg-icon="media/reward_icon.svg"></md-icon>-->
+            <!--<md-tooltip md-direction="top">{{'LABEL_ADD_REWARD' | translate}}</md-tooltip>-->
+            <!--</md-button>-->
+            <md-button ng-disabled="map.drawing()" ng-click="map.showInstructions()" class="md-icon-button" aria-label="Complex"
+                       id="show-instructions">
+                <md-icon md-svg-icon="media/info_icon.svg"></md-icon>
+                <md-tooltip md-direction="top">{{'LABEL_SHOW_INSTRUCTIONS' | translate}}</md-tooltip>
+            </md-button>
+            <md-button ng-disabled="map.drawing()" ng-click="map.showTutorial()" class="md-icon-button" aria-label="Complex"
+                id="show-tutorial">
+                <md-icon md-svg-icon="media/tutorial_icon.svg"></md-icon>
+                <md-tooltip md-direction="top">{{'LABEL_SHOW_TUTORIAL' | translate}}</md-tooltip>
+            </md-button>
+            <span flex></span>
+            <md-button ng-disabled="map.drawing()" ng-click="map.editQuestTree()" class="md-icon-button"
+                       aria-label="Complex" id="edit-storyline">
+                <md-icon md-svg-icon="media/complex_icon.svg"></md-icon>
+                <md-tooltip md-direction="top">{{'LABEL_EDIT_STORYLINE' | translate}}</md-tooltip>
+            </md-button>
+            <md-button ng-disabled="map.drawing()" ng-click="map.editQuest(evt)" aria-label="edit"
+                       class="md-icon-button" id="edit-quest">
+                <md-icon md-svg-icon="media/edit_icon.svg"></md-icon>
+                <md-tooltip md-direction="top">{{'LABEL_EDIT_QUEST' | translate}}</md-tooltip>
+            </md-button>
+            <md-button ng-disabled="map.drawing()" ng-click="map.cancelQuest(evt)" aria-label="delete"
+                       class="md-icon-button" id="cancel-quest">
+                <md-icon md-svg-icon="media/cancel_icon.svg"></md-icon>
+                <md-tooltip md-direction="top">{{'LABEL_CANCEL_EDITING' | translate}}</md-tooltip>
+            </md-button>
+            <md-button ng-disabled="map.drawing()" ng-click="map.saveQuest()" class="md-icon-button" aria-label="Save" id="save-quest">
+                <md-icon md-svg-icon="media/save_icon.svg"></md-icon>
+                <md-tooltip md-direction="top">{{'LABEL_SAVE_QUEST' | translate}}</md-tooltip>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-toolbar id="location-search" flex>
+        <div class="md-toolbar-tools" flex>
+            <md-button class="md-icon-button" aria-label="Settings" ng-click="map.toggleQuestline()">
+                <md-icon md-svg-icon="media/menu_icon.svg"></md-icon>
+            </md-button>
+
+            <md-autocomplete id="toolbar-search" ng-focus="map.searchFocused" md-input-id="toolbar-search-input"
+                             placeholder="{{'TEXT_LOCATION_PLACEHOLDER' | translate}}"
+                             md-selected-item="selectedItem"
+                             md-search-text="searchText"
+                             md-items="item in map.searchLocation(searchText)"
+                             md-item-text="item.display_name"
+                             md-autoselect="true" md-selected-item-change="map.gotoLocation(selectedItem)" flex>
+                <span md-highlight-text="searchText">{{item.display_name}}</span>
+                <md-not-found>
+                    {{'TEXT_NO_RESULTS' | translate }}
+                </md-not-found>
+            </md-autocomplete>
+
+
+            <md-button id="toolbar-search-icon" class="md-icon-button" aria-label="Settings"
+                       ng-click="map.searchAndGotoLocation(searchText)" flex="3">
+                <md-icon md-svg-icon="media/search_icon.svg"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+
+    <div id="map-tasks" ng-hide="map.drawing() || !map.showQuestline" ng-if="map.quest">
+        <div id="map-task">
+            <map-task ng-if="map.quest.treePartRoot" treepart="map.quest.treePartRoot" quest="map.quest"></map-task>
+        </div>
+
+
+        <div id="map-task-list" ui-sortable="map.sortableOptions" ng-model="map.quest.treeParts">
+            <div ng-repeat="treePart in map.quest.treeParts" ng-class="{'fixed': map.quest.getComplex()}">
+                <map-task treepart="treePart" quest="map.quest"></map-task>
+            </div>
+        </div>
+        <div class="map-task-add" id="add-task">
+            <md-button class="map-task-add-button" ng-click="map.addTreePart(map.quest, $event)">
+                <md-tooltip style="z-index:1000" class="button-tooltip" md-direction="bottom">
+                    {{'TOOLTIP_ADD_TASK' | translate}}
+                </md-tooltip>
+                <md-icon md-svg-icon="media/add_task_icon.svg" class="map-task-add-icon"></md-icon>
+                <md-label>{{'LABEL_ADD_TASK' | translate}}</md-label>
+            </md-button>
+        </div>
+    </div>
+
+
+    <!--<ul ui-sortable ng-model="items">
+        <li ng-repeat="item in items">{{ item }}</li>
+    </ul>-->
+
+    <!--<div id="markerSelectorBox" ng-hide="map.drawing() && !map.continueDrawing()">
+        &lt;!&ndash;<div class="marker">
+            <img src="media/fight_marker.png" class="markerSelector" ng-click="map.toggleMarker('FIGHT')"/>
+        </div>&ndash;&gt;
+        <div class="marker">
+            <img src="media/quiz_marker.png" class="markerSelector" ng-click="map.toggleMarker('QUIZ')"/>
+        </div>
+        <div class="marker">
+            <img src="media/info_marker.png" class="markerSelector" ng-click="map.toggleMarker('INFO')"/>
+            &lt;!&ndash;        <p class="markerLabel">Info</p>&ndash;&gt;
+        </div>
+&lt;!&ndash;        <div class="marker">
+            <img src="media/invisible_marker.png" class="markerSelector" ng-click="map.toggleMarker('INVISIBLE')"/>
+        </div>&ndash;&gt;
+    </div>-->
+    <div id="popup">
+        <div id="popupCloser"></div>
+        <div id="popupContent"></div>
+    </div>
+
+</div>
+
+
+

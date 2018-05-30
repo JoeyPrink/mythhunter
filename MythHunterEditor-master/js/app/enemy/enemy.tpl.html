@@ -1,0 +1,24 @@
+<div id="enemy-container">
+        <div layout="column">
+            <div layout="row">
+                <md-input-container flex="50" id="enemy-name">
+                    <label>Name</label>
+                    <input type="text" name="name" required maxlength="20" class="task-info"
+                           ng-model="enemyCtrl.enemy.name"/>
+                    <div ng-messages="enemyForm.name.$error">
+                        <div ng-message="required">{{'MESSAGE_REQUIRED' | translate}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+
+            <div layout="row">
+                <md-input-container flex="50" id="enemy-description">
+                    <label>{{'LABEL_EDITOR_DESCRIPTION' | translate}}</label>
+                    <textarea name="description" md-maxlength="70" class="enemy-description"
+                              ng-model="enemyCtrl.enemy.description"></textarea>
+                </md-input-container>
+            </div>
+
+
+        </div>
+</div>

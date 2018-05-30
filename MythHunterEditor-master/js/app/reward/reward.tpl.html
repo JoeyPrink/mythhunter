@@ -1,0 +1,25 @@
+<div class="reward-card-container" ng-repeat="card in reward.cards track by $index">
+    <div class="reward-deselect-button" ng-if="card">
+        <md-button class="md-raised md-icon-button" ng-click="reward.removeCard($index)">
+            <md-icon md-svg-icon="media/close_icon.svg"></md-icon>
+        </md-button>
+    </div>
+
+    <md-button ng-if="!card"  class="md-raised" ng-click="reward.createCard($index)">
+        <div style="position:relative; height: 280px; width:165px;">
+            <img src="media/card/card_placeholder.png" class="card-add" width="100%"/>
+        </div>
+        <div class="card-add-icon">
+            <img src="media/add_icon.svg"/>
+        </div>
+
+        <md-tooltip md-direction="top">{{'TOOLTIP_CREATE_CARD' | translate}}</md-tooltip>
+    </md-button>
+    <card ng-if="card" class="collection-card" card="card" image="card.image" edit="false" menu="true"></card>
+</div>
+
+<div style="text-align: center">
+    <md-button class="md-raised" ng-click="reward.openCollection()" ng-if="reward.numCollectionCards > 0">
+        {{'BUTTON_CHOOSE_FROM_COLLECTION' | translate}}
+    </md-button>
+</div>

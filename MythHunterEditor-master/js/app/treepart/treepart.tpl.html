@@ -1,0 +1,120 @@
+<div id="task-container" layout="column" ng-cloak flex-offset-gt-sm="10" flex-gt-sm="80" flex="100" layout-padding
+     ng-intro-options="treePartCtrl.introOptions" ng-intro-method="treePartCtrl.startIntro" ng-intro-autostart="treePartCtrl.tutorialAutoStart">
+    <form name="taskForm" ng-cloak ng-submit="treePartCtrl.confirm()">
+        <div layout-padding>
+            <div class="md-dialog-content">
+                <div>
+                    <h3>
+                        {{treePartCtrl.taskTypeText}} {{'TEXT_TASK' | translate}}
+                        <md-button ng-click="treePartCtrl.showTutorial()" class="md-icon-button" aria-label="Complex"
+                                   ng-if="treePartCtrl.task.getType() == 'QUIZ' || treePartCtrl.task.getType() == 'FIGHT'">
+                            <md-icon md-svg-icon="media/tutorial_icon.svg"></md-icon>
+                            <md-tooltip md-direction="top">{{'LABEL_SHOW_TUTORIAL' | translate}}</md-tooltip>
+                        </md-button>
+                    </h3>
+                    <br>
+                </div>
+                <div layout="row">
+                    <md-input-container flex="50" id="task-name">
+                        <label>{{'LABEL_TASK_NAME' | translate}}</label>
+                        <input required name="taskName" ng-model="treePartCtrl.task.name" autofocus>
+                        <div ng-messages="taskForm.taskName.$error">
+                            <div ng-message="required">{{'MESSAGE_REQUIRED' | translate}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div class="task-content">
+                    <md-label class="description-label">{{'LABEL_TASK_CONTENT' | translate}}</md-label>
+                    <md-button aria-label="description-hint" class="md-icon-button"
+                               ng-if="treePartCtrl.task.getType() == 'QUIZ'">
+                        <md-tooltip md-direction="top">
+                            {{'TOOLTIP_QUIZ_CONTENT' | translate}}
+                        </md-tooltip>
+                        <md-icon md-svg-icon="media/help_icon.svg"></md-icon>
+                    </md-button>
+                    <md-button aria-label="description-hint" class="md-icon-button"
+                               ng-if="treePartCtrl.task.getType() == 'INVISIBLE'">
+                        <md-tooltip md-direction="top">
+                            {{'TOOLTIP_INVISIBLE_CONTENT' | translate}}
+                        </md-tooltip>
+                        <md-icon md-svg-icon="media/help_icon.svg"></md-icon>
+                    </md-button>
+                    <md-button aria-label="description-hint" class="md-icon-button"
+                               ng-if="treePartCtrl.task.getType() == 'FIGHT'">
+                        <md-tooltip md-direction="top">
+                            {{'TOOLTIP_FIGHT_CONTENT' | translate}}
+                        </md-tooltip>
+                        <md-icon md-svg-icon="media/help_icon.svg"></md-icon>
+                    </md-button>
+                    <md-button aria-label="description-hint" class="md-icon-button"
+                               ng-if="treePartCtrl.task.getType() == 'INFO'">
+                        <md-tooltip md-direction="top">
+                            {{'TOOLTIP_INFO_CONTENT' | translate}}
+                        </md-tooltip>
+                        <md-icon md-svg-icon="media/help_icon.svg"></md-icon>
+                    </md-button>
+
+                    <div id="task-content"  ng-mouseover="treePartCtrl.focusContent(false)">
+                        <text-angular id="task-editor-quiz"
+                                      ng-if="treePartCtrl.task.getType() == treePartCtrl.types.QUIZ" name="task-editor-quiz"
+                                      ta-toolbar="{{treePartCtrl.quizToolbar}}" ng-model="treePartCtrl.content"
+                                      class="task-text"
+                                      ng-keydown="treePartCtrl.keyPressed($event)"
+                                      ng-click="treePartCtrl.contentChanged()"></text-angular>
+                        <text-angular ng-if="treePartCtrl.task.getType() != treePartCtrl.types.QUIZ" name="task-editor"
+                                      ta-toolbar="{{treePartCtrl.toolbar}}" ng-model="treePartCtrl.content"
+                                      class="task-text"></text-angular>
+                    </div>
+
+                    <div ng-if="treePartCtrl.task.getType() != treePartCtrl.types.INFO && treePartCtrl.task.getType() != 'start'"
+                         ng-mouseover="treePartCtrl.focusContent(true)">
+
+                        <md-label class="description-label">
+                            {{'LABEL_TASK_COMPLETE_CONTENT' | translate}}
+                        </md-label>
+                        <md-button aria-label="description-hint" class="md-icon-button">
+                            <md-tooltip md-visble="questCtrl.questDescriptionTooltipVisible" md-direction="top">
+                                {{'TOOLTIP_TASK_COMPLETE_CONTENT' | translate}}
+                            </md-tooltip>
+                            <md-icon md-svg-icon="media/help_icon.svg"></md-icon>
+                        </md-button>
+                        <div id="task-complete-content">
+                            <text-angular name="task-target" ta-toolbar="{{treePartCtrl.toolbar}}"
+                                          ng-model="treePartCtrl.targetContent"
+                                          class="task-text"></text-angular>
+                        </div>
+
+                    </div>
+
+                    <div ng-if="treePartCtrl.task.getType() == treePartCtrl.types.FIGHT">
+
+                        <md-label class="description-label">{{'LABEL_ENEMY' | translate}}</md-label>
+                        <md-button aria-label="description-hint" class="md-icon-button">
+                            <md-tooltip md-direction="top">
+                                {{'TOOLTIP_ENEMY' | translate}}
+                            </md-tooltip>
+                            <md-icon md-svg-icon="media/help_icon.svg"></md-icon>
+                        </md-button>
+                        <enemy enemy="treePartCtrl.task.enemy"></enemy>
+
+                        <md-label class="description-label">{{'BUTTON_EDIT_ENEMY_DECK' | translate}}</md-label>
+                        <div class="task-deck-button" flex>
+                            <md-button class="md-raised md-button-primary" ng-click="treePartCtrl.editEnemyDeck()" id="enemy-deck">
+                                <md-label>{{treePartCtrl.task.enemy.deck.name}}</md-label>
+                            </md-button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <md-button class="md-raised md-primary" type="submit" id="task-confirm">
+                        {{'BUTTON_FINISH_TASK' | translate}}
+                    </md-button>
+                    <md-button class="md-raised" ng-click="treePartCtrl.cancel()">
+                        {{'BUTTON_CANCEL' | translate}}
+                    </md-button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

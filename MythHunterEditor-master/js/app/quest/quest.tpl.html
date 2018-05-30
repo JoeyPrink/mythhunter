@@ -1,0 +1,77 @@
+<div id="quest-container" layout="column" ng-cloak flex-offset-gt-sm="10" flex-gt-sm="80" flex="100" layout-padding
+     ng-intro-options="questCtrl.introOptions" ng-intro-method="questCtrl.startIntro"
+     ng-intro-autostart="questCtrl.tutorialAutoStart">
+    <form name="questForm" ng-submit="questCtrl.confirm()">
+        <div layout-padding>
+            <div layout="row">
+                <h3>
+                    {{'TEXT_QUEST' | translate}}
+                    <md-button ng-click="questCtrl.showTutorial()" class="md-icon-button" aria-label="Complex">
+                        <md-icon md-svg-icon="media/tutorial_icon.svg"></md-icon>
+                        <md-tooltip md-direction="top">{{'LABEL_SHOW_TUTORIAL' | translate}}</md-tooltip>
+                    </md-button>
+                </h3>
+
+            </div>
+
+            <div layout="row">
+                <md-input-container id="quest-name">
+                    <label>{{'LABEL_QUEST_NAME' | translate}}</label>
+                    <input required name="questName" ng-model="questCtrl.quest.name" autofocus md-select-on-focus>
+                    <div ng-messages="questForm.questName.$error">
+                        <div ng-message="required">{{'MESSAGE_REQUIRED' | translate}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div flex>
+                <md-label class="description-label">{{'LABEL_QUEST_DESCRIPTION' | translate}}</md-label>
+                <md-button aria-label="description-hint" class="md-icon-button">
+                    <md-tooltip md-visble="questCtrl.questDescriptionTooltipVisible" md-direction="top">
+                        {{'TOOLTIP_QUEST_DESCRIPTION_1' | translate}}<br>{{'TOOLTIP_QUEST_DESCRIPTION_2' | translate}}
+                    </md-tooltip>
+                    <md-icon md-svg-icon="media/help_icon.svg"></md-icon>
+                </md-button>
+                <div id="quest-description" ng-mouseover="questCtrl.focusContent()">
+                    <text-angular id="quest-text" name="quest-content" ta-toolbar="{{questCtrl.toolbar}}"
+                                  ng-model="questCtrl.quest.html.content"
+                                  ng-focus="questCtrl.showQuestDescriptionTooltip()"></text-angular>
+                </div>
+
+            </div>
+            <div>
+                <div class="card-reward-instruction">
+                    <md-label class="description-label">
+                        <span translate="LABEL_QUEST_REWARDS" translate-values="{maxCards: questCtrl.maxCards }"></span>
+                    </md-label>
+                    <md-button aria-label="description-hint" class="md-icon-button">
+                        <md-tooltip md-visble="questCtrl.questDescriptionTooltipVisible" md-direction="top">
+                            {{'TOOLTIP_QUEST_REWARD_1' | translate}}<br>
+                            <span translate="TOOLTIP_QUEST_REWARD_2"
+                                  translate-values="{maxCards: questCtrl.maxCards }"></span><br>
+                            {{'TOOLTIP_QUEST_REWARD_3' | translate}}
+                        </md-tooltip>
+                        <md-icon md-svg-icon="media/help_icon.svg"></md-icon>
+                    </md-button>
+                </div>
+                <div class="quest-reward-container" id="quest-reward">
+                    <reward reward-ids="questCtrl.quest.specialCards" max-cards="questCtrl.maxCards"
+                            user="questCtrl.user"></reward>
+                </div>
+            </div>
+            <div>
+                <span>
+                    <md-button  id="quest-confirm" ng-if="!questCtrl.edit" class="md-raised md-primary" type="submit">
+                        {{'BUTTON_QUEST_START_TASK' | translate}}
+                    </md-button>
+                    <md-button  id="quest-confirm" ng-if="questCtrl.edit" class="md-raised md-primary" type="submit">
+                        {{'BUTTON_CONFIRM' | translate}}
+                    </md-button>
+                </span>
+
+                <md-button class="md-raised" ng-click="questCtrl.cancel()">
+                    {{'BUTTON_CANCEL' | translate}}
+                </md-button>
+            </div>
+        </div>
+    </form>
+</div>

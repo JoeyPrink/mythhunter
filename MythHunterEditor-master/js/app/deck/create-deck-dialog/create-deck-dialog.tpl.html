@@ -1,0 +1,52 @@
+<md-dialog aria-label="Create task">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>{{'TITLE_TUT_NEW_DECK' | translate}}</h2>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <div style="font-size: 16px">
+                <p>{{'TEXT_TUT_CREATE_DECK' | translate}}</p>
+                <ul>
+                    <li>
+                        <p><span translate="TEXT_TUT_DECK_NAME"></span></p>
+                    </li>
+                    <li>
+                        <p><span translate="TEXT_TUT_ADD_CARD_1"></span>
+                            <img src="media/deck_card.jpg" height="35px"><br>
+                            <span translate="TEXT_TUT_ADD_CARD_2"></span>
+                        </p>
+
+                    </li>
+                    <li>
+                        <p><span translate="TEXT_TUT_REMOVE_CARD"></span>
+                        </p>
+                    </li>
+                    <li>
+                        <p><span translate="TEXT_TUT_CARD_COUNT"></span><br>
+                            <img src="media/deck_card_count.jpg" height="25px">
+                        </p>
+                    </li>
+                    <li>
+                        <p><span translate="TEXT_TUT_SAVE_DECK"></span></p>
+                    </li>
+                </ul>
+                <p></p>
+
+                <p><span translate="TEXT_TUT_DECK_END"></span></p>
+            </div>
+
+            <!--<md-icon md-svg-icon="media/save_icon.svg"></md-icon>-->
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <span flex></span>
+        <md-checkbox class="instruction-use" ng-if="createDeck.chooseTutorial" ng-model="createDeck.tutorial" aria-label="separateDescription">
+            <md-label class="description-label">{{'LABEL_TUTORIAL' | translate}}</md-label>
+        </md-checkbox>
+        <md-button class="md-raised" ng-click="createDeck.confirm()">
+            {{'BUTTON_READY' | translate}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

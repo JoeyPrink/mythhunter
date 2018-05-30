@@ -1,0 +1,75 @@
+<md-nav-bar ng-if="user"
+            md-selected-nav-item="main.state"
+            nav-bar-aria-label="navigation links">
+    <md-nav-item ng-if="user" hide-xs hide-sm md-nav-sref="app.profile" name="/profile">
+        {{'NAVBAR_PROFILE' | translate}}
+    </md-nav-item>
+    <md-nav-item ng-if="user" hide-xs hide-sm md-nav-sref="app.map" name="/map">
+        {{'NAVBAR_MAP' | translate}}
+    </md-nav-item>
+    <md-nav-item ng-if="user" hide-xs hide-sm md-nav-sref="app.collection" name="/collection">
+        {{'NAVBAR_COLLECTION' | translate}}
+    </md-nav-item>
+    <!--<md-nav-item md-nav-sref="app.card" name="/card">-->
+    <!--Card Collection-->
+    <!--</md-nav-item>-->
+    <!--<md-nav-item md-nav-sref="app.deck" name="deck">-->
+    <!--Deck Creator-->
+    <!--</md-nav-item>-->
+
+    <md-button hide-gt-sm ng-click="main.toggleSidenav()" md-swipe-right="main.toggleSidenav()"
+               aria-label="toggle sidenav"
+               class="md-icon-button">
+        <md-icon md-svg-icon="media/menu_icon.svg"></md-icon>
+    </md-button>
+    <span flex></span>
+
+    <md-input-container>
+        <label>State</label>
+        <md-select ng-model="main.language" ng-change="main.changeLanguage()">
+            <md-option value="de"><img src="media/german-flag-small.png" height="20px" width="30px"/> DE</md-option>
+            <md-option value="en"><img src="media/british-flag-small.png" height="20px" width="30px"/> EN</md-option>
+        </md-select>
+    </md-input-container>
+    <md-button aria-label="Profile" class="md-icon-button" style="text-transform: none;">
+        <a ui-sref="app.profile">{{user.name}}</a>
+    </md-button>
+    <md-menu>
+        <md-button aria-label="Open demo menu" class="md-icon-button" style="text-transform: none;"
+                   ng-click="$mdOpenMenu($event)">
+            <md-icon md-svg-icon="media/menu_icon.svg"></md-icon>
+        </md-button>
+        <md-menu-content width="3">
+            <md-menu-item>
+                <md-button ng-click="main.logout()">
+                    <md-icon md-svg-icon="media/logout_icon.svg"></md-icon>
+                    <md-label>{{'LABEL_LOGOUT' | translate}}</md-label>
+                </md-button>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+</md-nav-bar>
+<md-sidenav ng-if="user" class="md-sidenav-left" md-component-id="sidenav" md-whiteframe="2">
+
+    <md-toolbar class="md-theme-indigo" md-swipe-left="main.toggleSidenav()">
+        <h1 class="md-toolbar-tools">Menu</h1>
+    </md-toolbar>
+
+    <md-content layout-margin>
+        <md-menu-content ng-mouseleave="$mdMenu.close()">
+            <md-menu-item>
+                <md-button ui-sref="app.profile" ng-click="main.toggleSidenav()" aria-label="Do something">
+                    {{'NAVBAR_PROFILE' | translate}}
+                </md-button>
+            </md-menu-item>
+            <!--<md-menu-item>-->
+                <!--<md-button ui-sref="app.map" ng-click="main.toggleSidenav()"  aria-label="Do something">-->
+                    <!--Quest creator-->
+                <!--</md-button>-->
+            <!--</md-menu-item>-->
+        </md-menu-content>
+
+    </md-content>
+
+</md-sidenav>
+<div layout="colum" ui-view></div>

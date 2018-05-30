@@ -1,0 +1,135 @@
+<div id="collection-container" flex-offset="10" flex="80" layout="row" ng-intro-options="collectionCtrl.introOptions"
+     ng-intro-method="collectionCtrl.startIntro" ng-intro-autostart="collectionCtrl.tutorialAutoStart">
+    <div flex="75" layout="column">
+        <div class="collection-filter-container" layout="row">
+            <md-tabs md-selected="selectedIndex" flex>
+                <md-tab label="{{'LABEL_COLLECTION' | translate}}" name="collection"
+                        ng-click="collectionCtrl.showCollection()"></md-tab>
+                <md-tab label="{{'LABEL_CREATED_CARDS' | translate}}" name="created"
+                        ng-click="collectionCtrl.showCreatedCards()"></md-tab>
+            </md-tabs>
+            <md-input-container class="collection-filter-content">
+                <label>Filter</label>
+                <input type="text" name="name" ng-model="collectionCtrl.searchText"/>
+            </md-input-container>
+            <div ng-repeat="star in collectionCtrl.starsFull track by $index"
+                 ng-click="collectionCtrl.filterStarClicked($index+1, true)"
+                 class="collection-filter-star-container">
+                <img src="media/star_full.png" class="collection-filter-star"/>
+                <div class="collection-filter-star-label"><span>{{$index+1}}</span></div>
+            </div>
+            <div ng-repeat="star in collectionCtrl.starsEmpty track by $index"
+                 ng-click="collectionCtrl.filterStarClicked($index+1 , false)"
+                 class="collection-filter-star-container">
+                <img src="media/star_empty.png" class="collection-filter-star"/>
+                <div class="collection-filter-star-label"><span>{{$index + collectionCtrl.starsFull.length + 1}}</span>
+                </div>
+            </div>
+            <md-button ng-click="collectionCtrl.clearFilterStars()" class="md-icon-button collection-filter-clear" aria-label="Clear">
+                <md-icon md-svg-icon="media/clear_icon.svg"></md-icon>
+                <md-tooltip md-direction="top">{{'CLEAR_FILTER' | translate}}</md-tooltip>
+            </md-button>
+        </div>
+
+        <div class="collection-cards-preview"  id="collection-cards" flex>
+            <div class="collection-card-add" ng-if="collectionCtrl.createdCardsShown">
+                <md-button class="md-raised" ng-click="collectionCtrl.createCard()">
+                    <div style="position:relative; height: 280px; width:165px;">
+                        <img src="media/card/card_placeholder.png" class="card-add" width="100%"/>
+                    </div>
+                    <div class="card-add-icon">
+                        <img src="media/add_icon.svg"/>
+                    </div>
+
+                    <md-tooltip md-direction="top">{{'TOOLTIP_CREATE_CARD' | translate}}</md-tooltip>
+                </md-button>
+            </div>
+
+            <div ng-show="collectionCtrl.collectionShown" ng-model="card.remoteId"
+                 ng-repeat="card in collectionCtrl.collection.cards | filter: collectionCtrl.starsFilter() | filter:collectionCtrl.contentFilter() | orderBy : 'stars'"
+                 ng-dblclick="collectionCtrl.addCardToDeck(card, false)" class="collection-card-preview-container"
+                 ng-class="{'collection-card-movable': card.loaded && collectionCtrl.currentDeck}"
+                 jqyoui-draggable="{index: {{$index}}, placeholder:'keep', containment: 'offset'}"
+                 data-drag="card.loaded && collectionCtrl.currentDeck && !collectionCtrl.cardLocked(card)"
+                 data-jqyoui-options="{revert: 'invalid', helper: 'clone', containment: '#collection-container'}">
+                <card class="collection-card" card="card" edit="false" menu="false"></card>
+                <div class="collection-card-lock-container" ng-if="collectionCtrl.cardLocked(card)">
+                    <div class="collection-card-lock-backdrop"></div>
+                    <img class="collection-card-lock" src="media/lock_icon.svg"/>
+                    <md-tooltip md-direction="top">
+                        <span translate="TOOLTIP_CARDS_PER_DECK" translate-values="{maxSingleCard: collectionCtrl.maxSingleCard}"></span>
+                    </md-tooltip>
+                </div>
+            </div>
+            <div ng-show="collectionCtrl.createdCardsShown" ng-model="card.remoteId"
+                 ng-repeat="card in collectionCtrl.collection.createdCards | filter: collectionCtrl.starsFilter() | filter:collectionCtrl.contentFilter() | orderBy : 'stars'"
+                 ng-dblclick="collectionCtrl.addCardToDeck(card, true)" class="collection-card-preview-container"
+                 ng-class="{'collection-card-movable': card.loaded && collectionCtrl.currentDeck && collectionCtrl.enemy}"
+                 jqyoui-draggable="{index: {{$index}}, placeholder:'keep', containment: 'offset'}"
+                 data-drag="collectionCtrl.enemy && card.loaded && collectionCtrl.currentDeck"
+                 data-jqyoui-options="{revert: 'invalid', helper: 'clone', containment: '#collection-container'}">
+                <card class="collection-card" card="card" edit="false" menu="!collectionCtrl.enemy"></card>
+            </div>
+        </div>
+
+    </div>
+    <div flex="25">
+        <form name="deckForm" ng-submit="collectionCtrl.saveDeck($event)" class="collection-decks-container"
+              layout="column"
+              cg-busy="{promise:collectionCtrl.saveDeckPromise, message:'Saving deck...'}">
+            <div class="collection-deck-button" ng-if="!collectionCtrl.currentDeck && !collectionCtrl.enemy">
+                <md-button class="md-raised md-primary" ng-click="collectionCtrl.createDeck()"
+                           ng-disabled="!collectionCtrl.collection.loaded">
+                    <md-label>{{'LABEL_CREATE_DECK' | translate}}</md-label>
+                </md-button>
+            </div>
+            <div class="collection-deck-buttons" layout="row" ng-if="collectionCtrl.currentDeck">
+                <md-button class="md-raised" ng-click="collectionCtrl.cancelDeck()" flex>
+                    <md-icon md-svg-src="media/back_icon.svg" class="back-icon"></md-icon>
+                    <md-label>{{'BUTTON_CANCEL' | translate}}</md-label>
+                </md-button><md-button ng-click="collectionCtrl.showInstructions()" class="md-raised md-icon-button" aria-label="Complex">
+                <md-icon md-svg-icon="media/info_icon.svg"></md-icon>
+                <md-tooltip md-direction="top">{{'LABEL_SHOW_INSTRUCTIONS' | translate}}</md-tooltip>
+            </md-button>
+
+                <md-button ng-click="collectionCtrl.showTutorial()" class="md-raised md-icon-button" aria-label="Complex">
+                    <md-icon md-svg-icon="media/tutorial_icon.svg"></md-icon>
+                    <md-tooltip md-direction="top">{{'LABEL_SHOW_TUTORIAL' | translate}}</md-tooltip>
+                </md-button>
+                <md-button ng-click="collectionCtrl.clearCurrentDeck()" class="md-raised md-icon-button" aria-label="Clear">
+                    <md-icon md-svg-icon="media/clear_icon.svg"></md-icon>
+                    <md-tooltip md-direction="top">{{'BUTTON_CLEAR_DECK' | translate}}</md-tooltip>
+                </md-button>
+            </div>
+
+            <div ng-if="!collectionCtrl.currentDeck" flex>
+                <div ng-repeat="deck in collectionCtrl.collection.decks" ng-if="!collectionCtrl.enemy"
+                     class="collection-deck-button-container" layout="row">
+                    <div class="collection-deck-button" flex>
+                        <md-button class="md-raised md-button-primary" ng-click="collectionCtrl.openDeck(deck)"
+                                   ng-disabled="!collectionCtrl.collection.loaded">
+                            <md-label>{{deck.name}}</md-label>
+                        </md-button>
+                    </div>
+                    <md-icon class="collection-deck-remove" md-svg-src="media/close_icon.svg"
+                             ng-click="collectionCtrl.removeDeck(deck, $event)"
+                             ng-disabled="!collectionCtrl.collection.loaded"></md-icon>
+                </div>
+            </div>
+
+            <div ng-if="collectionCtrl.currentDeck" class="collection-deck-container" flex
+                 data-drop="true" jqyoui-droppable="{onDrop: 'collectionCtrl.cardDropped($event)'}"
+                 ng-model="collectionCtrl.droppedCard">
+                <deck user="collectionCtrl.user" deck="collectionCtrl.currentDeck"
+                      control="collectionCtrl.deckControl"></deck>
+            </div>
+
+
+            <div ng-show="collectionCtrl.currentDeck" class="collection-deck-button" id="save-deck">
+                <md-button type="submit" class="md-raised">
+                    <md-label>{{'LABEL_SAVE_DECK' | translate}}</md-label>
+                </md-button>
+            </div>
+        </form>
+    </div>
+</div>
