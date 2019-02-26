@@ -1,6 +1,6 @@
 //
 // Definitions for schema: http://backend.com/wsdl
-//  http://192.168.1.238:8080/Backend/webservices/Backend?wsdl#types1
+//  http://192.168.0.94:8080/Backend/webservices/Backend?wsdl#types1
 //
 //
 // Constructor for XML Schema item {http://backend.com/wsdl}setRotateMapForUserResponse
@@ -30835,6 +30835,6 @@ function backend_com_wsdl_updateEnemyResponse_deserializeResponse(cxfjsutils, pa
     return returnObject;
 }
 function backend_com_wsdl_IBackend_backend_com_wsdl_BackendPort () {
-  this.url = 'http://192.168.1.238:8080/Backend/webservices/Backend';
+  this.url = 'http://192.168.0.94:8080/Backend/webservices/Backend';
 }
 backend_com_wsdl_IBackend_backend_com_wsdl_BackendPort.prototype = new backend_com_wsdl_IBackend;

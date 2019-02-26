@@ -15,9 +15,9 @@
     function BackendService($log, $q) {
 
         var backend = new backend_com_wsdl_IBackend();
-        backend.url = "http://mythhunter.ddns.net:18080/Backend/webservices/Backend?wsdl";
+        backend.url = "http://192.168.0.94:8080/Backend/webservices/Backend?wsdl";
         var cardRequests = [];
-        // backend.url = "http://192.168.1.238:8080/Backend/webservices/Backend?wsdl";
+        // backend.url = "http://192.168.0.94:8080/Backend/webservices/Backend?wsdl";
         $log = $log.getInstance("Backend", debugging);
 
         var service = {
