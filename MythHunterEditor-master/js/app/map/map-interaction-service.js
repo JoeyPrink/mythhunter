@@ -154,7 +154,7 @@
         }
 
         function removeClick() {
-            map.unByKey(clickEvent);
+            ol.Observable.unByKey(clickEvent);
         }
 
         function activateDrag(feature) {

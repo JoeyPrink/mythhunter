@@ -3464,7 +3464,7 @@
   </wsdl:binding>
   <wsdl:service name="BackendService">
     <wsdl:port binding="tns:BackendServiceSoapBinding" name="BackendPort">
-      <soap:address location="http://192.168.178.67:8080/Backend/webservices/Backend"/>
+      <soap:address location="http://192.168.0.164:8080/Backend/webservices/Backend"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
